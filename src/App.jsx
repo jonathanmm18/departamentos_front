@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Table, Avatar, message } from 'antd';
-const { createProxyMiddleware } = require('http-proxy-middleware');
+
+import { createProxyMiddleware } from 'http-proxy-middleware'; // Importa createProxyMiddleware aquí
 
 import './styles/App.less';
 
