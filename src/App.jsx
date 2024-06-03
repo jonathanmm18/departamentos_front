@@ -20,7 +20,7 @@ const App = () => {
         const response = await fetch('/api/departamentos');
         if (!response.ok) {
           console.log(response);
-          throw new Error(`Error al obtener los datos de los departamentos desde la API status: ${response.status}`);
+          throw new Error('Error al obtener los datos de los departamentos desde la API status');
         }
         const departamentosData = await response.json();
         setData(departamentosData);
