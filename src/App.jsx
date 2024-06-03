@@ -26,7 +26,6 @@ const App = () => {
         setData(departamentosData);
         setLoading(false);
       } catch (error) {
-        console.error('Error al obtener los datos de los departamentos:', error);
         message.error('Error al obtener los datos de los departamentos');
         setLoading(false);
       }
