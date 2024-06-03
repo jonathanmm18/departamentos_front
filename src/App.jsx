@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Table, Avatar, message } from 'antd';
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
 import './styles/App.less';
 
 const { Content } = Layout;
@@ -17,11 +19,26 @@ const App = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/api/departamentos');
+        const proxy = createProxyMiddleware('/api', {
+          target: 'https://app-departamentos-fdba2e12deac.herokuapp.com',
+          changeOrigin: true,
+          pathRewrite: {
+            '^/api': '',
+          },
+        });
+    
+        const response = await fetch('/api/departamentos', { // Utiliza '/api/departamentos' como la URL de la solicitud
+          method: 'GET',
+          headers: {
+            // Agrega cualquier encabezado necesario aquí
+          },
+        });
+        
         if (!response.ok) {
           console.log(response);
           throw new Error('Error al obtener los datos de los departamentos desde la API status');
         }
+        
         const departamentosData = await response.json();
         setData(departamentosData);
         setLoading(false);
