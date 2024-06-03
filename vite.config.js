@@ -4,6 +4,15 @@ import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://app-departamentos-fdba2e12deac.herokuapp.com',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, ''),
+      },
+    },
+  },
   plugins: [react()],
   css: {
     preprocessorOptions: {

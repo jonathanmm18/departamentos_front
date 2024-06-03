@@ -17,7 +17,7 @@ const App = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://app-departamentos-fdba2e12deac.herokuapp.com/departamentos');
+        const response = await fetch('/api/departamentos');
         if (!response.ok) {
           console.log(response);
           throw new Error(`Error al obtener los datos de los departamentos desde la API status: ${response.status}`);
