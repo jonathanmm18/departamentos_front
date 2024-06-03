@@ -13,6 +13,17 @@ export default defineConfig({
       },
     },
   },
+  preview: {
+    proxy: {
+      "/api": {
+        target: 'https://app-departamentos-fdba2e12deac.herokuapp.com',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (p) => p.replace(/^\/api/, ""),
+      },
+    },
+    cors: false,
+  },
   plugins: [react()],
   css: {
     preprocessorOptions: {
