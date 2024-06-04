@@ -16,6 +16,7 @@ import {
 
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import { render } from "less";
+import { resetWarned } from "antd/es/_util/warning";
 const { Content } = Layout;
 
 const getRandomColor = () => {
@@ -36,89 +37,35 @@ const getColorFromLength = (length) => {
     return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
   };
 
-const columns = [
-  {
-    title: "Nombre",
-    dataIndex: "nombre",
-    key: "nombre",
-    sorter: (a, b) => a.nombre.localeCompare(b.nombre),
-  },
-  {
-    title: "Departamento Superior",
-    dataIndex: "departamento_superior",
-    key: "departamento_superior",
-    render: (departamento_superior) =>
-      departamento_superior ? departamento_superior.nombre : "-",
-  },
-  {
-    title: "Colaboradores",
-    dataIndex: "numero_empleados",
-    key: "numero_empleados",
-    sorter: (a, b) => a.numero_empleados - b.numero_empleados,
-  },
-  {
-    title: "Subdivisiones",
-    dataIndex: "departamentos_sub",
-    key: "departamentos_sub",
-    render: (departamentos_sub) => {
-      const menu = (
-        <Menu>
-          {departamentos_sub.map((subdivision) => (
-            <Menu.Item key={subdivision.id}>{subdivision.nombre}</Menu.Item>
-          ))}
-        </Menu>
-      );
+const asyncFilterDepartamentosUniqueArray = async () => {
+    const response = await fetch(`/api/departamentos`);
+      if (!response.ok) {
+        throw new Error('Error al obtener los datos');
+      }
+    const departamentos = await response.json();
+    const uniqueData = departamentos.map((departamento) => departamento.nombre);
+    return uniqueData.map((nombre) => ({ text: nombre, value: nombre }));
+    }
 
-      return (
-        <Space>
-          <Dropdown overlay={menu} trigger={["click"]}>
-            <a
-              className="ant-dropdown-link"
-              onClick={(e) => e.preventDefault()}
-              style={{ textDecoration: "None" }}
-            >
-              <Badge status="success" text="Ver" color="hwb(205 6% 9%)">
-                <Avatar shape="square" size="large" style={{ backgroundColor: getColorFromLength(departamentos_sub.length), marginRight: 8 }} >
-                  {departamentos_sub.length}
-                </Avatar>
-              </Badge>
-            </a>
-          </Dropdown>
-        </Space>
-      );
-    },
-    sorter: (a, b) => a.departamentos_sub.length - b.departamentos_sub.length,
-  },
-  {
-    title: "Embajador Designado",
-    dataIndex: "embajador_designado",
-    key: "embajador_designado",
-    render: (embajador) =>
-      embajador ? (
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <Avatar
-            style={{ backgroundColor: getRandomColor(), marginRight: 8 }}
-            size="medium"
-          >
-            {embajador.nombre_completo.charAt(0)}
-          </Avatar>
-          {embajador.nombre_completo}
-        </div>
-      ) : (
-        "-"
-      ),
-    sorter: (a, b) =>
-      a.embajador_designado.nombre_completo.localeCompare(
-        b.embajador_designado.nombre_completo
-      ),
-  },
-];
 
 const DepartamentosTabla = () => {
   const [data, setData] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(true);
   const [selectedOption, setSelectedOption] = useState('nombre'); // Estado inicial
+  const [nombreFilter, setNombreFilter] = useState([{}]);
+  const [nivelesFilter, setNivelesFilter] = useState([{}]);
+
+  const nombreFilterArray = (departamentos) => {
+    const uniqueData = departamentos.map((departamento) => departamento.nombre);
+    return uniqueData.map((nombre) => ({ text: nombre, value: nombre }));
+    };
+
+  const nivelesFilterArray = (departamentos) => {
+    const uniqueData = departamentos.map((departamento) => departamento.nivel);
+    return uniqueData.map((nivel) => ({ text: nivel, value: nivel }));
+
+    };
 
   const handleChange = (value) => {
     setSelectedOption(value);
@@ -145,6 +92,7 @@ const DepartamentosTabla = () => {
   };
 
 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -158,6 +106,9 @@ const DepartamentosTabla = () => {
         const departamentosData = await response.json();
         setData(departamentosData);
         setLoading(false);
+        setNombreFilter(nombreFilterArray(departamentosData));
+        setNivelesFilter(nivelesFilterArray(departamentosData));
+
       } catch (error) {
         message.error("Error al obtener los datos de los departamentos");
         setLoading(false);
@@ -166,6 +117,109 @@ const DepartamentosTabla = () => {
 
     fetchData();
   }, []);
+
+  const columns = [
+    {
+      title: "Nombre",
+      dataIndex: "nombre",
+      key: "nombre",
+      sorter: (a, b) => a.name.length - b.name.length,
+      filters: nombreFilter,
+      onFilter: (value, record) => record.nombre.indexOf(value) === 0,
+      sortDirections: ['descend'],
+      resetWarned: true,
+      resetText: 'Reiniciar',
+      okText: 'OK',
+    },
+    
+    {
+      title: "Departamento Superior",
+      dataIndex: "departamento_superior",
+      key: "departamento_superior",
+      render: (departamento_superior) =>
+        departamento_superior ? departamento_superior.nombre : "-",
+      filters: nombreFilter,
+      onFilter: (value, record) => record.nombre.indexOf(value) === 0,
+      sortDirections: ['descend'],
+      resetWarned: true,
+      resetText: 'Reiniciar',
+      okText: 'OK',
+    },
+    {
+      title: "Colaboradores",
+      dataIndex: "numero_empleados",
+      key: "numero_empleados",
+      sorter: (a, b) => a.numero_empleados - b.numero_empleados,
+    },
+    {
+        title: "Niveles",
+        dataIndex: "nivel",
+        key: "nivel",
+        filters: nivelesFilter,
+        onFilter: (value, record) => record.niveles.indexOf(value) === 0,
+        sortDirections: ['descend'],
+        resetWarned: true,
+        resetText: 'Reiniciar',
+        okText: 'OK',
+    },
+    {
+      title: "Subdivisiones",
+      dataIndex: "departamentos_sub",
+      key: "departamentos_sub",
+      render: (departamentos_sub) => {
+        const menu = (
+          <Menu>
+            {departamentos_sub.map((subdivision) => (
+              <Menu.Item key={subdivision.id}>{subdivision.nombre}</Menu.Item>
+            ))}
+          </Menu>
+        );
+  
+        return (
+          <Space>
+            <Dropdown overlay={menu} trigger={["click"]}>
+              <a
+                className="ant-dropdown-link"
+                onClick={(e) => e.preventDefault()}
+                style={{ textDecoration: "None" }}
+              >
+                <Badge status="success" text="Ver" color="hwb(205 6% 9%)">
+                  <Avatar shape="square" size="large" style={{ backgroundColor: getColorFromLength(departamentos_sub.length), marginRight: 8 }} >
+                    {departamentos_sub.length}
+                  </Avatar>
+                </Badge>
+              </a>
+            </Dropdown>
+          </Space>
+        );
+      },
+      sorter: (a, b) => a.departamentos_sub.length - b.departamentos_sub.length,
+    },
+    {
+      title: "Embajador Designado",
+      dataIndex: "embajador_designado",
+      key: "embajador_designado",
+      render: (embajador) =>
+        embajador ? (
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Avatar
+              style={{ backgroundColor: getRandomColor(), marginRight: 8 }}
+              size="medium"
+            >
+              {embajador.nombre_completo.charAt(0)}
+            </Avatar>
+            {embajador.nombre_completo}
+          </div>
+        ) : (
+          "-"
+        ),
+      sorter: (a, b) =>
+        a.embajador_designado.nombre_completo.localeCompare(
+          b.embajador_designado.nombre_completo
+        ),
+    },
+  ];
+  
 
 
 
