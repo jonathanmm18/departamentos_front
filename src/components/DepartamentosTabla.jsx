@@ -8,10 +8,15 @@ import {
   Menu,
   Badge,
   Space,
+  Input,
+  Select,
+  Flex,
+  Button, 
 } from "antd";
 
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import { render } from "less";
+const { Content } = Layout;
 
 const getRandomColor = () => {
   const letters = "0123456789ABCDEF";
@@ -111,7 +116,34 @@ const columns = [
 
 const DepartamentosTabla = () => {
   const [data, setData] = useState([]);
+  const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(true);
+  const [selectedOption, setSelectedOption] = useState('nombre'); // Estado inicial
+
+  const handleChange = (value) => {
+    setSelectedOption(value);
+    // Aquí puedes guardar la opción seleccionada en alguna parte
+    console.log('Opción seleccionada:', value);
+  };
+
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
+  const handleButtonClick = async () => {
+    try {
+      const response = await fetch(`/api/getDepartamentosByColumnValue/${selectedOption}/${inputValue}`);
+      if (!response.ok) {
+        throw new Error('Error al obtener los datos');
+      }
+      const result = await response.json();
+      setData(result);
+      message.success('Datos obtenidos exitosamente');
+    } catch (error) {
+      message.error('Error al obtener los datos');
+      console.error(error);
+    }
+  };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -135,8 +167,63 @@ const DepartamentosTabla = () => {
     fetchData();
   }, []);
 
+
+
   return (
     <>
+    <Content
+        style={{
+            padding: 24,
+            margin: 0,
+        }}
+    >
+        <Flex justify='space-between' gap={'large'} horizontal> 
+            <Space>
+                <Button 
+                    type="primary"
+                >
+                    Listado
+                </Button>
+                <Button 
+                    type="default"
+                >
+                    Árbol
+                </Button>
+            </Space>
+        <Space>
+            <Select
+                showSearch
+                style={{ width: 200, marginRight: 16 }}
+                placeholder="Selecciona una columna de búsqueda"
+                optionFilterProp="children"
+                value={selectedOption} // Valor seleccionado
+                onChange={handleChange} // Manejador de cambio
+                filterOption={(input, option) =>
+                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+            >
+                <Select.Option value="nombre">Nombre</Select.Option>
+                <Select.Option value="departamento_superior">
+                    Departamento Superior
+                </Select.Option>
+                <Select.Option value="numero_empleados">Colaboradores</Select.Option>
+                <Select.Option value="departamentos_sub">Subdivisiones</Select.Option>
+                <Select.Option value="embajador_designado">
+                    Embajador Designado
+                </Select.Option>
+
+            </Select>
+            <Input.Search
+                placeholder="Buscar departamento"
+                enterButton="Buscar"
+                size="middle"
+                style={{ width: 400 }}
+                onChange={handleInputChange}
+                onSearch={handleButtonClick}
+            />
+        </Space>
+        </Flex>
+    </Content>
       <Table
         columns={columns}
         dataSource={data}

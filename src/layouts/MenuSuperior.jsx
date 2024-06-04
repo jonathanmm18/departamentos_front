@@ -20,10 +20,10 @@ const MenuSuperior = () => {
           <img src="./img/logo.jpg" alt="Logo" style={{ height: 100, margin: 0 , padding:0 }} />
         </div>
         <Menu theme="dark" defaultSelectedKeys={['1']} style={{ flex: 1, display: 'flex', justifyContent: 'center' , backgroundColor:'#1890FF', color:'#ffffff' }}>
-          <Menu.Item key="1" style={{ color: '#ffffff', ':hover': { color: '#002766' } }}>Dashboard</Menu.Item>
-          <Menu.Item key="2" style={{ color: '#ffffff', ':hover': { color: '#002766' } }}>Organizacion</Menu.Item>
-          <Menu.Item key="3" style={{ color: '#ffffff', ':hover': { color: '#002766' } }}>Modelos</Menu.Item>
-          <Menu.Item key="4" style={{ color: '#ffffff', ':hover': { color: '#002766' } }}>Seguimiento</Menu.Item>
+          <Menu.Item key="1" style={{ color: '#ffffff', width:'auto', ':hover': { color: '#002766' } }}>Dashboard</Menu.Item>
+          <Menu.Item key="2" style={{ color: '#ffffff', width:'auto', ':hover': { color: '#002766' } }}>Organizacion</Menu.Item>
+          <Menu.Item key="3" style={{ color: '#ffffff', width:'auto', ':hover': { color: '#002766' } }}>Modelos</Menu.Item>
+          <Menu.Item key="4" style={{ color: '#ffffff', width:'auto', ':hover': { color: '#002766' } }}>Seguimiento</Menu.Item>
         </Menu>
 
       </div>
