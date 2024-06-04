@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Table, Avatar, message } from 'antd';
+import { Layout, Table, Avatar, message, Spam } from 'antd';
 import './styles/App.less';
 
 const { Content } = Layout;
@@ -7,7 +7,7 @@ const { Content } = Layout;
 const columns = [
   { title: 'Nombre', dataIndex: 'nombre', key: 'nombre' },
   { title: 'Número de Empleados', dataIndex: 'numero_empleados', key: 'numero_empleados' },
-  { title: 'Embajador Designado', dataIndex: 'embajador_designado', key: 'embajador_designado', render: embajador => <Avatar>{embajador.nombre_completo[0]}</Avatar> },
+  { title: 'Embajador Designado', dataIndex: 'embajador_designado', key: 'embajador_designado', render: embajador => embajador.nombre_completo},
 ];
 
 const App = () => {
