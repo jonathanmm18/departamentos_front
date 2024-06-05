@@ -62,8 +62,17 @@ const DepartamentosTabla = () => {
     };
 
   const nivelesFilterArray = (departamentos) => {
-    const uniqueData = departamentos.map((departamento) => departamento.nivel);
-    return uniqueData.map((nivel) => ({ text: nivel, value: nivel }));
+    const uniqueData = departamentos
+        .map((departamento) => departamento.nivel)
+        .reduce((acc, nivel) => {
+        if (!acc.includes(nivel)) {
+          acc.push(nivel);
+        }
+        return acc;
+      }, []);
+    const nivelesUnicos = uniqueData.sort();
+    console.log(nivelesUnicos);
+    return nivelesUnicos.map((nivel) => ({ text: nivel, value: nivel }));
 
     };
 
@@ -156,7 +165,7 @@ const DepartamentosTabla = () => {
         dataIndex: "nivel",
         key: "nivel",
         filters: nivelesFilter,
-        onFilter: (value, record) => record.niveles.indexOf(value) === 0,
+        onFilter: (value, record) => record.nivel.indexOf(value) === 0,
         sortDirections: ['descend'],
         resetWarned: true,
         resetText: 'Reiniciar',
