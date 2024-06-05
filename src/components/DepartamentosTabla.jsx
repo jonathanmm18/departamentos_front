@@ -14,9 +14,6 @@ import {
   Button, 
 } from "antd";
 
-import { DownOutlined, UserOutlined } from "@ant-design/icons";
-import { render } from "less";
-import { resetWarned } from "antd/es/_util/warning";
 const { Content } = Layout;
 
 const getRandomColor = () => {
@@ -36,16 +33,6 @@ const getColorFromLength = (length) => {
     // Construir el color en formato HSL
     return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
   };
-
-const asyncFilterDepartamentosUniqueArray = async () => {
-    const response = await fetch(`/api/departamentos`);
-      if (!response.ok) {
-        throw new Error('Error al obtener los datos');
-      }
-    const departamentos = await response.json();
-    const uniqueData = departamentos.map((departamento) => departamento.nombre);
-    return uniqueData.map((nombre) => ({ text: nombre, value: nombre }));
-    }
 
 
 const DepartamentosTabla = () => {
@@ -87,6 +74,9 @@ const DepartamentosTabla = () => {
   };
   const handleButtonClick = async () => {
     try {
+      if (!inputValue) {
+        inputValue = 'null';
+      }
       const response = await fetch(`/api/getDepartamentosByColumnValue/${selectedOption}/${inputValue}`);
       if (!response.ok) {
         throw new Error('Error al obtener los datos');
