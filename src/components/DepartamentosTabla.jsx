@@ -165,7 +165,7 @@ const DepartamentosTabla = () => {
         dataIndex: "nivel",
         key: "nivel",
         filters: nivelesFilter,
-        onFilter: (value, record) => record.nivel.indexOf(value) === 0,
+        onFilter: (value, record) => record.nivel == value,
         sortDirections: ['descend'],
         resetWarned: true,
         resetText: 'Reiniciar',
