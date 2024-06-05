@@ -122,13 +122,13 @@ const DepartamentosTabla = () => {
       title: "Nombre",
       dataIndex: "nombre",
       key: "nombre",
-      sorter: (a, b) => a.name.length - b.name.length,
       filters: nombreFilter,
       onFilter: (value, record) => record.nombre.indexOf(value) === 0,
       sortDirections: ['descend'],
       resetWarned: true,
       resetText: 'Reiniciar',
       okText: 'OK',
+      sorter: (a, b) => a.nombre.localeCompare(b.nombre),
     },
     
     {
@@ -143,6 +143,7 @@ const DepartamentosTabla = () => {
       resetWarned: true,
       resetText: 'Reiniciar',
       okText: 'OK',
+      sorter: (a, b) => a.nombre.localeCompare(b.nombre),
     },
     {
       title: "Colaboradores",
