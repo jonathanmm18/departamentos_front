@@ -74,7 +74,7 @@ const DepartamentosTabla = () => {
   };
   const handleButtonClick = async () => {
     try {
-      if (!inputValue) {
+      if (!inputValue || inputValue === '') {
          setInputValue('null');
       }
       const response = await fetch(`/api/getDepartamentosByColumnValue/${selectedOption}/${inputValue}`);
