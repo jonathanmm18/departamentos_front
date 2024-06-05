@@ -20,8 +20,7 @@ const OrganizacionPage = () => {
 
   return (
     <>
-      <Content className="content">
-        <Title>Organizacion</Title>
+        <Title level={3}>Organizacion</Title>
         <Tabs defaultActiveKey="1" onChange={callback}>
           <TabPane tab="Divisiones" key="1">
             <DepartamentosTabla />
@@ -30,7 +29,6 @@ const OrganizacionPage = () => {
             Contenido de la pestaña de Colaboradores
           </TabPane>
         </Tabs>
-      </Content>
 
       <Divider orientation="left"></Divider>
     </>

@@ -14,10 +14,10 @@ const UserMenu = (
 
 const MenuSuperior = () => {
   return (
-    <Header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 20px' ,backgroundColor:'#1890FF',}}>
+    <Header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: 0 ,padding: '50px 20px' ,backgroundColor:'#1890FF',}}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <div style={{ marginRight: 0 }}>
-          <img src="./img/logo.jpg" alt="Logo" style={{ height: 100, margin: 0 , padding:0 }} />
+          <img src="./img/logo.png" alt="Logo" style={{ height: 120, margin: 0 , padding:0 }} />
         </div>
         <Menu theme="dark" defaultSelectedKeys={['1']} style={{ flex: 1, display: 'flex', justifyContent: 'center' , backgroundColor:'#1890FF', color:'#ffffff' }}>
           <Menu.Item key="1" style={{ color: '#ffffff', width:'auto', ':hover': { color: '#002766' } }}>Dashboard</Menu.Item>
